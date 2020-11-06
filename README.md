@@ -1,6 +1,8 @@
-# my-blog
+# Vue test
 
-> A Vue.js project
+## Branch
+
+- vue-test1:   A vue demo about blog, including adding blogs and searching blogs 
 
 ## Build Setup
 

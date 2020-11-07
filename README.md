@@ -9,16 +9,18 @@
 
 ## 数据源
 
-湖北省统计局；http://tjj.hubei.gov.cn/tjsj/sjkscx/tjnj/qstjnj/
-CSDN：https://download.csdn.net/download/one_a_xiaobai/12322724
-数据经过适当的处理
+1. 湖北省统计局；http://tjj.hubei.gov.cn/tjsj/sjkscx/tjnj/qstjnj/
+2. CSDN：https://download.csdn.net/download/one_a_xiaobai/12322724
+   数据经过适当的处理
 
 ## 目录结构
 
-static  -- 静态资源。存放js，font， css以及数据文件
-templates  -- 页面文件。存放h5
-pachong.py  -- 数据采集
-wash.py  -- 数据清洗
-analytic.py  -- 数据挖掘
-app.py  -- 启动文件。flask框架
+1. static  -- 静态资源。存放js，font， css以及数据文件
+2. templates  -- 页面文件。存放h5
+3. pachong.py  -- 数据采集
+4. wash.py  -- 数据清洗
+5. analytic.py  -- 数据挖掘
+6. app.py  -- 启动文件。flask框架
+
+
 

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/flexible.js"></script>
+    <script src="../static/js/echarts.min.js"></script>
+    <script src="../static/js/axios.min.js"></script>
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/css/single.css">
+</head>
+<body>
+<section class="mainBox" >
+    <div class="column">
+         <div class="panel pie_2">
+                <h2>湖北省部分地区GDP对比图</h2>
+                <div class="chart"></div>
+                <div class="panel_footer"></div>
+         </div>
+    </div>
+</section>
+<div class="exp">
+    <p>湖北省部分地区GDP分布如下，由于武汉省占湖北省GDP比重太高，其他城市看不到，故没有展示武汉，由图展示可得
+    襄阳市和宜昌市是除武汉市占比最高的。</p>
+</div>
+<script type="text/javascript">
+var myChart = echarts.init(document.querySelector(".pie_2  .chart"));
+    var option = {
+        // legend: {
+        //   top: "90%",
+        //   itemWidth: 10,
+        //   itemHeight: 10,
+        //   textStyle: {
+        //     color: "rgba(255,255,255,.5)",
+        //     fontSize: "12",
+        //   },
+        // },     //数据太多不好展示直接去掉
+        tooltip: {
+            trigger: "item",
+            formatter: "{a} <br/>{b} : {c} ({d}%)",   //a 系列名称，b 数据项名称，c 数值，d 百分比
+        },
+        // 注意颜色写的位置
+        color: [
+            "#20B2AA",
+            "#40E0D0",
+            "#7FFFAA",
+            "#00FA9A",
+            "#FFFFE0",
+            "#FFE4B5",
+            "#F5DEB3",
+            "#D2B48C",   //8
+            "#FFA07A",
+            "	#FF7F50	",
+            "	#FF4500	",
+        ],
+        series: [
+            {
+                name: "湖北省部分地区GDP",
+                type: "pie",
+                // 如果radius是百分比则必须加引号
+                radius: ["10%", "70%"],
+                center: ["50%", "42%"],
+                roseType: "radius",
+                data: [],
+                // 修饰饼形图文字相关的样式 label对象
+                label: {
+                    fontSize: 10,
+                },
+                // 修饰引导线样式
+                labelLine: {
+                    // 连接到图形的线长度
+                    length: 10,
+                    // 连接到文字的线长度
+                    length2: 10,
+                },
+            },
+        ],
+    };
+
+    myChart.setOption(option);
+    window.addEventListener("resize", function () {
+        myChart.resize();
+    });
+
+    myChart.showLoading(); //数据加载完之前先显示一段简单的loading动画
+    axios
+        .get("../static/hb_GDP_1.json")   //源数据对比差异太大，所以对数据做了手动修改，去掉了相差较大项
+        .then((res) => {
+            let json = res.data;
+            option.series[0].data = json;
+            myChart.hideLoading();
+            myChart.setOption(option);
+        })
+        .catch((err) => {
+            console.log(err);
+            // myChart.hideLoading();
+        });
+</script>
+</body>
+</html>

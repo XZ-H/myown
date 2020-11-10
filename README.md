@@ -1,4 +1,4 @@
-# Vue test
+# My code
 
 ## Branch
 
@@ -7,4 +7,32 @@
 - flask-demo:   A large visual screen using flask framework 
 
 - vue-test2:   A large visual screen using vue framework 
+
+## Clone
+
+```bash
+git clone [repositories_address]
+
+git checkout [brancs_name]
+```
+
+## Commit
+
+​		commit local code
+
+```bash
+cd [code_directory]
+
+git init 
+
+git remote add origin [repositories_address]
+
+git checkout -b [branch_name]
+
+git add .
+
+git commit -m [commit_infomation]
+
+git push --set-upstream origin [branch_name]
+```
 

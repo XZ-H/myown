@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/flexible.js"></script>
+    <script src="../static/js/echarts.min.js"></script>
+    <script src="../static/js/axios.min.js"></script>
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/css/single.css">
+</head>
+<body>
+<section class="mainBox" >
+    <div class="column">
+         <div class="panel bar_2">
+                <h2>北美洲GDP对比图</h2>
+                <div class="chart"></div>
+                <div class="panel_footer"></div>
+         </div>
+    </div>
+</section>
+<div class="exp">
+    <p>北美洲显示结果如上图，由图可知美国在北美洲的GDP一枝独秀，占据北美洲将近全部的经济，由此可知美国的经济还是很强的。</p>
+</div>
+<script type="text/javascript">
+ var myChart = echarts.init(document.querySelector(".bar_2 .chart"));
+    var myColor = ["#1089E7", "#F57474", "#56D0E3"];
+    option = {
+        //图标位置
+        grid: {
+            top: "10%",
+            left: "22%",
+            bottom: "10%",
+        },
+        xAxis: {
+            show: false,
+        },
+        yAxis: [
+            {
+                show: true,
+                data: [],
+                inverse: true,
+                axisLine: {
+                    show: false,
+                },
+                splitLine: {
+                    show: false,
+                },
+                axisTick: {
+                    show: false,
+                },
+                axisLabel: {
+                    color: "#fff",
+
+                    rich: {
+                        lg: {
+                            backgroundColor: "#339911",
+                            color: "#fff",
+                            borderRadius: 15,
+                            // padding: 5,
+                            align: "center",
+                            width: 15,
+                            height: 15,
+                        },
+                    },
+                },
+            },
+            {
+                show: true,
+                inverse: true,
+                // data: valdata,
+                data: [], //显示在右边的数据（yAxis）
+                axisLabel: {
+                    textStyle: {
+                        fontSize: 12,
+                        color: "#fff",
+                    },
+                },
+            },
+        ],
+        series: [
+            {
+                name: "条",
+                type: "bar",
+                yAxisIndex: 0,
+                // data: data,
+                data: [],
+                barCategoryGap: 50,
+                barWidth: 10,
+                itemStyle: {
+                    normal: {
+                        barBorderRadius: 20,
+                        color: function (params) {
+                            var num = myColor.length;
+                            return myColor[params.dataIndex % num];
+                        },
+                    },
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: "insideLeft",
+                        color: '#fff',
+                        formatter: "{c} %",
+                    },
+                },
+            },
+            {
+                name: "框",
+                type: "bar",
+                yAxisIndex: 1,
+                barCategoryGap: 50,
+                data: [100, 100, 100, 100, 100],
+                barWidth: 15,
+                itemStyle: {
+                    normal: {
+                        color: "none",
+                        borderColor: "#00c1de",
+                        borderWidth: 3,
+                        barBorderRadius: 15,
+                    },
+                },
+            },  //外框
+        ],
+    };
+    myChart.setOption(option);
+    window.addEventListener("resize", function () {
+        myChart.resize();
+    });
+
+    myChart.showLoading(); //数据加载完之前先显示一段简单的loading动画
+
+    $.getJSON("../static/GDP_data_1.json", function (res) {
+            let json = res[4].children;
+            // console.log(json);
+            let arry1 = [];  //yAxis--data-左
+            let arry2 = [];  //yAxis--data-右
+            let arrs = [];  //series--data
+            for (let i = 0; i < json.length; i++) {
+                // console.log(json[i]['value']);
+                arry1.push(json[i]['name']);
+                arry2.push(json[i]['value'].toFixed(2));  //push压值
+                let s = (json[i]['value'] / res[4]['value']) * 100;
+                arrs.push(s.toFixed(2));
+                // console.log(s.toFixed(2))
+
+            }
+            myChart.setOption({
+                yAxis: [{
+                    data: arry1 //赋值
+                },
+                    {
+                        data: arry2
+                    }],
+                series: [{
+                    data: arrs
+                }]
+            })
+        }
+    );
+    myChart.hideLoading();
+
+</script>
+</body>
+</html>

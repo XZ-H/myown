@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/flexible.js"></script>
+    <script src="../static/js/echarts.min.js"></script>
+    <script src="../static/js/axios.min.js"></script>
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/css/single.css">
+</head>
+<body>
+<section class="mainBox" >
+    <div class="column">
+         <div class="panel line_2">
+                <h2>湖北省产业指数对比图</h2>
+                <div class="chart"></div>
+                <div class="panel_footer"></div>
+         </div>
+    </div>
+</section>
+<div class="exp">
+    <p>湖北省产业指数如上图所示，整个湖北省，第一产业指数在102-104之间，第二产业指数102-110之间，但是湖北省中施恩州第二产业指数是
+        最低的，神农架最高，且差距较大，第三产业指数在108-112之间。
+    </p>
+</div>
+<script type="text/javascript">
+var myChart = echarts.init(document.querySelector(".line_2 .chart"));
+
+    option = {
+        tooltip: {
+            trigger: "axis",
+            axisPointer: {
+                lineStyle: {
+                    color: "#dddc6b",
+                },
+            },
+        },
+        legend: {
+            top: "0%",
+            textStyle: {
+                color: "rgba(255,255,255,.5)",
+                fontSize: "12",
+            },
+        },
+        grid: {
+            left: "10",
+            top: "30",
+            right: "10",
+            bottom: "10",
+            containLabel: true,
+        },
+
+        xAxis: [
+            {
+                type: "category",
+                boundaryGap: false,
+                axisLabel: {
+                    textStyle: {
+                        color: "rgba(255,255,255,.6)",
+                        fontSize: 12,
+                    },
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: "rgba(255,255,255,.2)",
+                    },
+                },
+
+                data: [],  //横坐标数据，这里分别为 第一产业，第二产业，第三产业
+            },
+            {
+                axisPointer: {
+                    show: false,
+                },
+                axisLine: {
+                    show: false,
+                },
+                position: "bottom",
+                // offset: 20,
+            },
+        ],
+        dataZoom: [
+            {
+                type: "inside",
+                start: 0,
+                end: 10,
+            },
+            {
+                start: 0,
+                end: 10,
+                handleIcon:
+                    "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
+                handleSize: "80%",
+                handleStyle: {
+                    color: "#4169E1",
+                    shadowBlur: 3,
+                    shadowColor: "rgba(0, 0, 0, 0.6)",
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2,
+                },
+            },
+        ],
+        yAxis: [
+            {
+                type: "value",
+                min: 100,  //y轴刻度从100开始
+                axisTick: {
+                    show: false,
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: "rgba(255,255,255,.1)",
+                    },
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: "rgba(255,255,255,.6)",
+                        fontSize: 12,
+                    },
+                },
+
+                splitLine: {
+                    lineStyle: {
+                        color: "rgba(255,255,255,.1)",
+                    },
+                },
+            },
+        ],
+        series: [
+            {
+                name: "第一产业",
+                type: "line",
+                smooth: false,
+                symbol: "circle",
+                symbolSize: 5,
+                showSymbol: false,
+                lineStyle: {
+                    normal: {
+                        color: "#0184d5",
+                        width: 2,
+                    },
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(
+                            0,
+                            0,
+                            0,
+                            1,
+                            [
+                                {
+                                    offset: 0,
+                                    color: "rgba(1, 132, 213, 0.4)",
+                                },
+                                {
+                                    offset: 0.8,
+                                    color: "rgba(1, 132, 213, 0.1)",
+                                },
+                            ],
+                            false
+                        ),  //渐变色生成器
+                        shadowColor: "rgba(0, 0, 0, 0.1)",
+                    },
+                },
+                itemStyle: {
+                    normal: {
+                        color: "#0184d5",
+                        borderColor: "rgba(221, 220, 107, .1)",
+                        borderWidth: 12,
+                    },
+                },
+                data: [], //第一产业指数
+            },
+            {
+                name: "第二产业",
+                type: "line",
+                smooth: true,
+                symbol: "circle",
+                symbolSize: 5,
+                showSymbol: false,
+                lineStyle: {
+                    normal: {
+                        color: "#00d887",
+                        width: 2,
+                    },
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(
+                            0,
+                            0,
+                            0,
+                            1,
+                            [
+                                {
+                                    offset: 0,
+                                    color: "rgba(0, 216, 135, 0.4)",
+                                },
+                                {
+                                    offset: 0.8,
+                                    color: "rgba(0, 216, 135, 0.1)",
+                                },
+                            ],
+                            false
+                        ),
+                        shadowColor: "rgba(0, 0, 0, 0.1)",
+                    },
+                },
+                itemStyle: {
+                    normal: {
+                        color: "#00d887",
+                        borderColor: "rgba(221, 220, 107, .1)",
+                        borderWidth: 12,
+                    },
+                },
+                data: [],   //第二生产指数
+            },
+            {
+                name: "第三产业",
+                type: "line",
+                smooth: true,
+                symbol: "circle",
+                symbolSize: 5,
+                showSymbol: false,
+                lineStyle: {
+                    normal: {
+                        color: "#7FFF00",   //line颜色
+                        width: 2,
+                    },
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(
+                            0,
+                            0,
+                            0,
+                            1,
+                            [
+                                {
+                                    offset: 0,
+                                    color: "rgba(127, 255, 0, 0.4)",
+                                },
+                                {
+                                    offset: 0.8,
+                                    color: "rgba(127, 255, 0, 0.1)",
+                                },
+                            ],
+                            false
+                        ),
+                        shadowColor: "rgba(0, 0, 0, 0.1)",
+                    },
+                },
+                itemStyle: {
+                    normal: {
+                        color: "#7FFF00",
+                        borderColor: "rgba(221, 220, 107, .1)",
+                        borderWidth: 12,
+                    },
+                },
+                data: [],   //第二生产指数
+            },
+        ],
+    };
+
+    myChart.setOption(option);
+    window.addEventListener("resize", function () {
+        myChart.resize();
+    });
+    myChart.showLoading(); //数据加载完之前先显示一段简单的loading动画
+    axios
+        .get("../static/hb_GDP_zs.json")
+        .then((res) => {
+            let json = res.data;
+            let arrx = [];  //存x轴数据
+            let arrs1 = []; //第一产业
+            let arrs2 = []; //第二产业
+            let arrs3 = [];
+            // console.log("ok");
+            for (let i in json) {
+                // console.log(json[i]['地      区']);
+                arrx.push(json[i]['地      区']);
+                arrs1.push(json[i]['第一产业'].toFixed(2));
+                arrs2.push(json[i]['第二产业'].toFixed(2));
+                arrs3.push(json[i]['第三产业'].toFixed(2))
+            }
+            myChart.setOption({
+                xAxis: [{
+                    data: arrx //赋值
+                }],
+                series: [{
+                    data: arrs1
+                },
+                    {
+                        data: arrs2
+                    },
+                    {
+                        data: arrs3
+                    }
+                ]
+            })
+            myChart.hideLoading();
+        })
+        .catch((err) => {
+            console.log(err);
+            // myChart.hideLoading();
+        });
+
+</script>
+</body>
+</html>

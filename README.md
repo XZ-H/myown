@@ -4,7 +4,7 @@
 
 - vue-test1:   A vue demo about blog, including adding blogs and searching blogs 
 
-- flask-demo:   A vue demo about blog, including adding blogs and searching blogs 
+- flask-demo:   A large visual screen using flask framework 
 
 ## Build Setup
 

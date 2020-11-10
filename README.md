@@ -1,6 +1,6 @@
 # echart
 
-> A Vue.js project
+> A Vue.js project about echarts
 
 ## Build Setup
 

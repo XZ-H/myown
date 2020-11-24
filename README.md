@@ -8,6 +8,8 @@
 
 - vue-test2:   A large visual screen using vue framework 
 
+- vue-test3:   A vue program about emergency knowledge graph
+
 ## Clone
 
 ```bash

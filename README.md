@@ -10,6 +10,8 @@
 
 - vue-test3:   A vue program about emergency knowledge graph
 
+- vue_vuex_test:  vuex studying
+
 ## Clone
 
 ```bash

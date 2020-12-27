@@ -3,14 +3,11 @@
 ## Branch
 
 - vue-test1:   A vue demo about blog, including adding blogs and searching blogs 
-
 - flask-demo:   A large visual screen using flask framework 
-
 - vue-test2:   A large visual screen using vue framework 
-
 - vue-test3:   A vue program about emergency knowledge graph
-
 - vue_vuex_test:  vuex studying
+- map-render：A bingmap
 
 ## Clone
 

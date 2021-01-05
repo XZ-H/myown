@@ -36,7 +36,7 @@ function timeClick() {
           $(".time-line li.active")
             .next()
             .addClass("active")
-            .siblings() //选择除本身以外的其他同级元素,,
+            .siblings() //选择除本身以外的其他同级元素
             .removeClass("active");
         }
         $timeLi.each(function () {
@@ -113,19 +113,16 @@ function timeClick() {
 
             active = document.getElementsByClassName("active");
             act = active[0].innerText;
-            document.getElementById("wuhan_startTime").innerHTML = act;
-            document.getElementById("hubei_startTime").innerHTML = act;
-            document.getElementById("nation_startTime").innerHTML = act;
-            document.getElementById("others_startTime").innerHTML = act; //向提示跨里第一个span添加"startTime"
             if (act === origin_data[i]["startTime"]) {
               document.getElementById("wuhan_events").innerHTML = "";
-              document.getElementById("wuhan_influence").innerHTML = "";
               document.getElementById("hubei_events").innerHTML = "";
-              document.getElementById("hubei_influence").innerHTML = "";
               document.getElementById("nation_events").innerHTML = "";
-              document.getElementById("nation_influence").innerHTML = "";
-              document.getElementById("others_events").innerHTML = "";
-              document.getElementById("others_influence").innerHTML = ""; //重写数据
+              document.getElementById("others_events").innerHTML = ""; //重写数据
+
+              document.getElementById("wuhan_startTime").innerHTML = act;
+              document.getElementById("hubei_startTime").innerHTML = act;
+              document.getElementById("nation_startTime").innerHTML = act;
+              document.getElementById("others_startTime").innerHTML = act; //向提示跨里第一个span添加"startTime"
               let events_data = origin_data[i]["events"];
               for (let j in events_data) {
                 temp_type.push(events_data[j]["type"]);
@@ -139,10 +136,11 @@ function timeClick() {
                     document.getElementsByClassName(
                       "customInfobox1"
                     )[0].style.display = "block";
+                    document.getElementsByClassName(
+                      "arrow_1"
+                    )[0].style.visibility = "visible";
                     document.getElementById("wuhan_events").innerHTML +=
                       "🔺" + measure_data[k].name; //   \x0A => \n 换行
-                    document.getElementById("wuhan_influence").innerHTML +=
-                      measure_data[k].value + "\xa0\xa0\xa0\xa0"; // \xa0 => ' ' 空格
                   }
                   if (
                     temp_type.indexOf("Policies and measures of Wuhan City") ===
@@ -152,7 +150,11 @@ function timeClick() {
                     document.getElementsByClassName(
                       "customInfobox1"
                     )[0].style.display = "none";
+                    document.getElementsByClassName(
+                      "arrow_1"
+                    )[0].style.visibility = "hidden";
                   }
+                  //...湖北...
                   if (
                     events_data[j]["type"] ===
                     "Policies and measures of Hubei Province"
@@ -160,10 +162,11 @@ function timeClick() {
                     document.getElementsByClassName(
                       "customInfobox2"
                     )[0].style.display = "block";
+                    document.getElementsByClassName(
+                      "arrow_2"
+                    )[0].style.visibility = "visible";
                     document.getElementById("hubei_events").innerHTML +=
                       "🔺" + measure_data[k].name;
-                    document.getElementById("hubei_influence").innerHTML +=
-                      measure_data[k].value + "\xa0\xa0\xa0\xa0";
                   }
                   if (
                     temp_type.indexOf(
@@ -173,17 +176,22 @@ function timeClick() {
                     document.getElementsByClassName(
                       "customInfobox2"
                     )[0].style.display = "none";
+                    document.getElementsByClassName(
+                      "arrow_2"
+                    )[0].style.visibility = "hidden";
                   }
+                  //...国家...
                   if (
                     events_data[j]["type"] === "Policies and measures of nation"
                   ) {
                     document.getElementsByClassName(
                       "customInfobox3"
                     )[0].style.display = "block";
+                    document.getElementsByClassName(
+                      "arrow_3"
+                    )[0].style.visibility = "visible";
                     document.getElementById("nation_events").innerHTML +=
                       "🔺" + measure_data[k].name; //\xa0==>空格
-                    document.getElementById("nation_influence").innerHTML +=
-                      measure_data[k].value + "\xa0\xa0\xa0\xa0";
                   }
                   if (
                     temp_type.indexOf("Policies and measures of nation") === -1
@@ -191,7 +199,11 @@ function timeClick() {
                     document.getElementsByClassName(
                       "customInfobox3"
                     )[0].style.display = "none";
+                    document.getElementsByClassName(
+                      "arrow_3"
+                    )[0].style.visibility = "hidden";
                   }
+                  //...其他省市...
                   if (
                     events_data[j]["type"] ===
                     "Policies and measures of other provinces and cities"
@@ -199,10 +211,11 @@ function timeClick() {
                     document.getElementsByClassName(
                       "customInfobox4"
                     )[0].style.display = "block";
+                    document.getElementsByClassName(
+                      "arrow_4"
+                    )[0].style.visibility = "visible";
                     document.getElementById("others_events").innerHTML +=
                       "🔺" + measure_data[k].name;
-                    document.getElementById("others_influence").innerHTML +=
-                      measure_data[k].value + "\xa0\xa0\xa0\xa0";
                   }
                   if (
                     temp_type.indexOf(
@@ -212,6 +225,9 @@ function timeClick() {
                     document.getElementsByClassName(
                       "customInfobox4"
                     )[0].style.display = "none";
+                    document.getElementsByClassName(
+                      "arrow_4"
+                    )[0].style.visibility = "hidden";
                   }
                 }
               }
@@ -235,5 +251,157 @@ function timeClick() {
   //点击某个时间点时触发事件
   $timeLi.not(":first-child").click(function () {
     $(this).addClass("active").siblings().removeClass("active");
+    $(".time-btn").removeClass("time-pause").addClass("time-play");
+    axios.get("../data/data_pro_ed.json").then((res) => {
+      let origin_data = res.data;
+      let temp_type = []; //声明一个数组,用来存储同一时间，哪些['type']字段有数据
+      for (let i = 0; i < origin_data.length; i++) {
+        try {
+          if (index === 0 && cnt > 10 && cnt - 4 <= origin_data.length) {
+            //index===0 => 播放到第一个点，cnt>10=>过了第一次循环播放
+            //判断是否是第二次循环播放，并且是否播放到第一个点
+            document.getElementById("time_0").innerHTML =
+              origin_data[cnt - 5]["startTime"];
+            document.getElementById("time_1").innerHTML =
+              origin_data[cnt - 4]["startTime"];
+            document.getElementById("time_2").innerHTML =
+              origin_data[cnt - 3]["startTime"];
+            document.getElementById("time_3").innerHTML =
+              origin_data[cnt - 2]["startTime"];
+            document.getElementById("time_4").innerHTML =
+              origin_data[cnt - 1]["startTime"];
+            document.getElementById("time_5").innerHTML =
+              origin_data[cnt]["startTime"];
+          }
+        } catch (e) {
+          //处理播放完时多余的点（也即没有数据的点）
+          update_i = origin_data.length - cnt + 5; //求出从第update_i个点开始没有数据
+          for (let j = update_i; j < 6; j++) {
+            update_id = "time_" + j; //绑定i标签用
+            update_class = "data_index_" + j; //绑定li标签用
+            document.getElementById(update_id).style.visibility = "hidden";
+            document.getElementsByClassName(update_class)[0].style.visibility =
+              "hidden"; //注意getElementsByClassName的用法，它返回的是一个集合
+          }
+        }
+        if (cnt === origin_data.length + 4) {
+          //播放完
+          $(".time-btn").removeClass("time-pause").addClass("time-play"); //时间轴播放按钮样式转换
+          play_cnt = 1;
+          clearInterval(timer); //清除定时器
+        }
+
+        active = document.getElementsByClassName("active");
+        act = active[0].innerText;
+        if (act === origin_data[i]["startTime"]) {
+          document.getElementById("wuhan_events").innerHTML = "";
+          document.getElementById("hubei_events").innerHTML = "";
+          document.getElementById("nation_events").innerHTML = "";
+          document.getElementById("others_events").innerHTML = ""; //重写数据
+
+          document.getElementById("wuhan_startTime").innerHTML = act;
+          document.getElementById("hubei_startTime").innerHTML = act;
+          document.getElementById("nation_startTime").innerHTML = act;
+          document.getElementById("others_startTime").innerHTML = act; //向提示跨里第一个span添加"startTime"
+          let events_data = origin_data[i]["events"];
+          for (let j in events_data) {
+            temp_type.push(events_data[j]["type"]);
+            let measure_data = events_data[j]["measure"];
+            for (let k in measure_data) {
+              if (
+                events_data[j]["type"] === "Policies and measures of Wuhan City"
+              ) {
+                //当天有武汉数据则写入，并且提示框显示
+                document.getElementsByClassName(
+                  "customInfobox1"
+                )[0].style.display = "block";
+                document.getElementsByClassName("arrow_1")[0].style.visibility =
+                  "visible";
+                document.getElementById("wuhan_events").innerHTML +=
+                  "🔺" + measure_data[k].name; //   \x0A => \n 换行
+              }
+              if (
+                temp_type.indexOf("Policies and measures of Wuhan City") === -1
+              ) {
+                //没有数据隐藏
+                document.getElementsByClassName(
+                  "customInfobox1"
+                )[0].style.display = "none";
+                document.getElementsByClassName("arrow_1")[0].style.visibility =
+                  "hidden";
+              }
+              //...湖北...
+              if (
+                events_data[j]["type"] ===
+                "Policies and measures of Hubei Province"
+              ) {
+                document.getElementsByClassName(
+                  "customInfobox2"
+                )[0].style.display = "block";
+                document.getElementsByClassName("arrow_2")[0].style.visibility =
+                  "visible";
+                document.getElementById("hubei_events").innerHTML +=
+                  "🔺" + measure_data[k].name;
+              }
+              if (
+                temp_type.indexOf("Policies and measures of Hubei Province") ===
+                -1
+              ) {
+                document.getElementsByClassName(
+                  "customInfobox2"
+                )[0].style.display = "none";
+                document.getElementsByClassName("arrow_2")[0].style.visibility =
+                  "hidden";
+              }
+              //...国家...
+              if (
+                events_data[j]["type"] === "Policies and measures of nation"
+              ) {
+                document.getElementsByClassName(
+                  "customInfobox3"
+                )[0].style.display = "block";
+                document.getElementsByClassName("arrow_3")[0].style.visibility =
+                  "visible";
+                document.getElementById("nation_events").innerHTML +=
+                  "🔺" + measure_data[k].name; //\xa0==>空格
+              }
+              if (temp_type.indexOf("Policies and measures of nation") === -1) {
+                document.getElementsByClassName(
+                  "customInfobox3"
+                )[0].style.display = "none";
+                document.getElementsByClassName("arrow_3")[0].style.visibility =
+                  "hidden";
+              }
+              //...其他省市...
+              if (
+                events_data[j]["type"] ===
+                "Policies and measures of other provinces and cities"
+              ) {
+                document.getElementsByClassName(
+                  "customInfobox4"
+                )[0].style.display = "block";
+                document.getElementsByClassName("arrow_4")[0].style.visibility =
+                  "visible";
+                document.getElementById("others_events").innerHTML +=
+                  "🔺" + measure_data[k].name;
+              }
+              if (
+                temp_type.indexOf(
+                  "Policies and measures of other provinces and cities"
+                ) === -1
+              ) {
+                document.getElementsByClassName(
+                  "customInfobox4"
+                )[0].style.display = "none";
+                document.getElementsByClassName("arrow_4")[0].style.visibility =
+                  "hidden";
+              }
+            }
+          }
+          temp_type.splice(0, temp_type.length);
+        }
+      }
+    });
+    clearInterval(timer); //清除定时器
   });
 }

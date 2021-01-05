@@ -5,7 +5,7 @@
 .customInfobox4 {
   background-color: #fff;
   width: 370px !important;
-  padding: 0 15px 10px 0;
+  padding: 5px 15px 5px 5px;
   font-size: 12px;
   pointer-events: auto !important;
   position: absolute;
@@ -15,14 +15,6 @@
 .customInfobox4 {
   display: none;
 }
-.customInfobox1 .title,
-.customInfobox2 .title,
-.customInfobox3 .title,
-.customInfobox4 .title {
-  font-size: 14px;
-  font-weight: bold;
-  /* margin-bottom: 5px; */
-}
 
 a.customInfoboxCloseButton:link,
 a.customInfoboxCloseButton:visited {
@@ -30,26 +22,39 @@ a.customInfoboxCloseButton:visited {
   text-decoration: none;
   position: absolute;
   top: 0px;
-  /* right: 0px; */
-  left: 372px;
+  left: 377px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
   font-size: 14px;
 }
-
-#box-top {
-  background-color: #666699;
-  height: 25px;
+.arrow_1,
+.arrow_3 {
+  width: 0px !important;
+  height: 0px !important;
+  border-top: 30px solid transparent;
+  border-right: solid transparent;
+  border-bottom: transparent;
+  border-left: 34px #fff solid;
+  background-color: transparent;
+  padding: 0;
 }
-#box-center {
-  font-size: 15px;
-  font-weight: 200;
-  height: 20px;
+.arrow_2,
+.arrow_4 {
+  width: 0px !important;
+  height: 0px !important;
+  border-top: 30px solid transparent;
+  border-right: 30px solid #fff;
+  border-bottom: transparent;
+  border-left: transparent;
+  background-color: transparent;
+  padding: 0;
+  position: relative;
+  left: 360px;
 }
-#box-center #things {
-  padding: 0 5px;
-  border-right: 1px solid rgb(58, 66, 79);
-  background-color: #cccccc;
+.arrow_1,
+.arrow_2,
+.arrow_4 {
+  visibility: hidden;
 }
 #box-bottom {
   position: relative;
@@ -70,5 +75,4 @@ a.customInfoboxCloseButton:visited {
 #others_influence {
   color: black;
   width: 300px;
-  display: inline-block;
 }

@@ -8,6 +8,7 @@
 - vue-test3:   A vue program about emergency knowledge graph
 - vue_vuex_test:  vuex studying
 - map-render：A bingmap
+- pom：A project about public opinion monitoring
 
 ## Clone
 

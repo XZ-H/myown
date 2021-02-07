@@ -3,6 +3,9 @@ import Router from "vue-router";
 import Login from "@/components/Login";
 import Home from "@/components/Home";
 import Register from "@/components/Register";
+import Index from "@/components/Index";
+import Graph from "@/components/Graph";
+import Mine from "@/components/Mine";
 Vue.use(Router);
 
 const router = new Router({
@@ -21,11 +24,29 @@ const router = new Router({
       path: "/home",
       name: "home",
       component: Home,
+      redirect: "/index",
+      children: [
+        {
+          path: "/index",
+          name: "首页总览",
+          component: Index,
+        },
+        {
+          path: "/graph",
+          name: "图谱预览",
+          component: Graph,
+        },
+      ],
     },
     {
       path: "/register",
       name: "register",
       component: Register,
+    },
+    {
+      path: "/mine",
+      name: "mine",
+      component: Mine,
     },
   ],
 });

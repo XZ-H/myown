@@ -91,10 +91,13 @@ export default {
                 } else {
                   var index = usrArr.indexOf(_this.form.name);
                   if (pwdArr[index] === _this.form.password) {
-                    _this.userToken = "Bearer " + resp[index].token;
+                    _this.userToken = "Pom " + resp[index].token;
                     // 将用户token保存到vuex中
                     _this.$store.commit("changeLogin", {
                       Authorization: _this.userToken,
+                    });
+                    _this.$store.dispatch("setUserInfo", {
+                      Username: _this.form.name,
                     });
                     _this.$router.push("/home");
                   } else {

@@ -11,18 +11,12 @@
               tag="li"
               class="col"
               class-active="active"
-              to="/home"
+              v-for="(item, index) in $router.options.routes[2].children"
+              :key="index + 1"
+              :to="item.path"
               exact
-              ><i class="nav-border"></i>首页总览
+              ><i class="nav-border"></i>{{ item.name }}
             </router-link>
-            <router-link
-              tag="li"
-              class="col"
-              class-active="active"
-              to="/login"
-              exact
-              ><i class="nav-border"></i>图谱总览</router-link
-            >
           </nav>
         </div>
         <div id="pom-opreation">
@@ -36,48 +30,70 @@
                 >个人中心</el-dropdown-item
               >
             </el-dropdown-menu>
+            <span style="margin-left: 10px; font-size: 16px">{{
+              username
+            }}</span>
           </el-dropdown>
         </div>
-        <div id="pom-usrname">
-          <span>这里是用户名长度测试</span>
-        </div>
       </el-header>
-      <el-main>Main</el-main>
-      <el-footer>Footer</el-footer>
+      <el-main><router-view></router-view></el-main>
+      <el-footer
+        ><div id="pom-copyright">
+          ©2021 Flashwhite. All rights reserved.
+        </div></el-footer
+      >
     </el-container>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "home",
   data() {
     return {};
   },
+  computed: {
+    ...mapGetters({
+      username: "getUname",
+    }),
+  },
   methods: {
-    logout() {
-      this.$store.commit("del_token");
-      this.$router.push("/login");
+    jump(where) {
+      switch (where) {
+        case "logout":
+          this.$store.commit("del_user");
+          this.$router.push("/login");
+          break;
+        case "mine":
+          this.$router.push("/mine");
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
+.el-header {
+  background-color: #47a0e4;
   color: #333;
   line-height: 100px;
   display: flex;
   height: 100px !important;
 }
-
+.el-footer {
+  background-color: #47a0e4;
+  line-height: 60px;
+  color: #e9e0d6;
+  display: flex;
+  height: 60px !important;
+  align-items: center;
+  justify-content: center;
+}
 .el-main {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
-  line-height: 160px;
 }
 body > .el-container {
   margin-bottom: 40px;
@@ -93,28 +109,25 @@ body > .el-container {
 }
 #pom-icon,
 #pom-navigation,
-#pom-opreation,
-#pom-usrname {
+#pom-opreation {
   display: inline-block;
   line-height: 100px !important;
 }
 #pom-opreation {
   position: absolute;
   top: 0;
-  right: 200px;
+  right: 100px;
 }
-#pom-usrname {
-  position: absolute;
-  top: 0;
-  right: 35px;
-}
-
 nav li {
   list-style-type: none;
   width: 100px;
   display: inline-block;
   text-align: center;
   position: relative;
+}
+.router-link-exact-active {
+  background-color: #1f6ed4;
+  cursor: pointer;
 }
 .nav-border {
   width: 1px;
@@ -130,5 +143,6 @@ nav li {
   position: absolute;
   width: 100px;
   top: 57px !important;
+  left: 1065px !important;
 }
 </style>

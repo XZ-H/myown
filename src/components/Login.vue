@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form class="form" :rules="rules" :model="form" ref="form">
-      <h3>登录界面</h3>
+      <h3>登录</h3>
       <el-form-item label="用户名" label-width="80px" prop="name">
         <el-input
           class="item"
@@ -96,7 +96,6 @@ export default {
                     _this.$store.commit("changeLogin", {
                       Authorization: _this.userToken,
                     });
-                    alert("登录成功");
                     _this.$router.push("/home");
                   } else {
                     alert("密码错误");
@@ -129,6 +128,10 @@ export default {
 }
 .login h3 {
   text-align: center;
+  font-size: 26px;
+  line-height: 50px;
+  font-weight: bold;
+  margin: 10px;
 }
 .form {
   max-width: 300px;
@@ -140,8 +143,8 @@ export default {
   z-index: 9;
 }
 .login-btn {
-  width: 70%;
-  margin: 0 15%;
+  width: 80%;
+  margin: 0 10%;
 }
 .usr-register {
   float: right;

@@ -91,9 +91,10 @@ export default {
   justify-content: center;
 }
 .el-main {
-  background-color: #e9eef3;
+  background-color: #e9e9ea;
   color: #333;
-  text-align: center;
+  margin: 0;
+  padding: 0 !important;
 }
 body > .el-container {
   margin-bottom: 40px;

@@ -8,14 +8,19 @@
         <div id="pom-navigation">
           <nav>
             <router-link
-              tag="li"
               class="col"
-              class-active="active"
+              custom
+              v-slot="{ href, navigate, isActive }"
               v-for="(item, index) in $router.options.routes[2].children"
               :key="index + 1"
               :to="item.path"
               exact
-              ><i class="nav-border"></i>{{ item.name }}
+            >
+              <li :class="{ active: isActive }">
+                <a :href="href" @click="navigate">
+                  <i class="nav-border"></i>{{ item.name }}
+                </a>
+              </li>
             </router-link>
           </nav>
         </div>
@@ -126,7 +131,11 @@ nav li {
   text-align: center;
   position: relative;
 }
-.router-link-exact-active {
+nav li a {
+  text-decoration: none;
+  color: #333;
+}
+.active {
   background-color: #1f6ed4;
   cursor: pointer;
 }
@@ -144,6 +153,6 @@ nav li {
   position: absolute;
   width: 100px;
   top: 57px !important;
-  left: 1065px !important;
+  left: 1045px !important;
 }
 </style>

@@ -41,7 +41,7 @@
           </el-dropdown>
         </div>
       </el-row>
-      <el-table :data="tableData2" style="width: 100%" :show-header="false">
+      <el-table :data="tableData2" style="width: 100%">
         <el-table-column prop="[abstarct,original_link]" label="摘要">
           <template slot-scope="scope">
             <a :href="scope.row.original_link">{{ scope.row.abstract }}</a>

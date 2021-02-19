@@ -13,7 +13,7 @@
       <el-row id="innerBox-top">疫情信息可视化</el-row>
       <div id="box-right-chart1"></div>
     </div>
-    <div id="pom-index-box" class="box-left">
+    <div id="pom-index-box" class="box-left row2">
       <el-row id="innerBox-top"
         >详情信息
         <div
@@ -41,7 +41,7 @@
           </el-dropdown>
         </div>
       </el-row>
-      <el-table :data="tableData2" style="width: 100%">
+      <el-table :data="tableData2" style="width: 100%" max-height="331px">
         <el-table-column prop="[abstarct,original_link]" label="摘要">
           <template slot-scope="scope">
             <a :href="scope.row.original_link">{{ scope.row.abstract }}</a>
@@ -59,7 +59,7 @@
         ></el-table-column>
       </el-table>
     </div>
-    <div id="pom-index-box" class="box-right">
+    <div id="pom-index-box" class="box-right row2">
       <el-row id="innerBox-top" class="distributed">{{
         innerBoxTop4_text
       }}</el-row>
@@ -501,6 +501,9 @@ export default {
 #pom-index-box {
   width: 46%;
   background-color: #fff;
+}
+.row2 {
+  height: 377px;
 }
 .box-left {
   margin: 2% 1% 2% 3%;

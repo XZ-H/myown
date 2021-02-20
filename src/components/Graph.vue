@@ -57,36 +57,81 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="18"><div class="grid-content bg-right"></div></el-col>
+      <el-col :span="18" class="grid-content bg-right"
+        ><div
+          class="graph-fig"
+          style="width: 98%; height: 97%; background-color: #fff; margin: 1%"
+        ></div
+      ></el-col>
     </el-row>
   </div>
 </template>
 <script>
+//引入基本模板
+let echarts = require("echarts/lib/echarts");
+
+//引入图形类型
+require("echarts/lib/chart/graph");
+
+//引入使用组件tooltip、toolbox等
+require("echarts/lib/component/tooltip");
+require("echarts/lib/component/toolbox");
+
 export default {
   name: "graph",
   data() {
     return {
       isActive: "",
+      nodes: [],
     };
   },
   methods: {
     searchNode(param) {
       let _this = this;
       _this.isActive = param;
-      switch (param) {
-        case "time": {
-          break;
-        }
-        case "loc": {
-          break;
-        }
-        case "emotion": {
-          break;
-        }
-        case "media": {
-          break;
-        }
-      }
+      this.axios
+        .get("/api/graph/nodeLabels", {
+          searchNode: param,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            //请求成功
+            switch (res.config.searchNode) {
+              case "time": {
+                _this.nodes = [];
+                _this.nodes.push({
+                  时间: res.data.data["time"],
+                });
+                break;
+              }
+              case "loc": {
+                _this.nodes = [];
+                _this.nodes.push({
+                  地点: res.data.data["loc"],
+                });
+                break;
+              }
+              case "emotion": {
+                _this.nodes = [];
+                _this.nodes.push({
+                  情感属性: res.data.data["emotion"],
+                });
+                break;
+              }
+              case "media": {
+                _this.nodes = [];
+                _this.nodes.push({
+                  媒体类型: res.data.data["media"],
+                });
+                break;
+              }
+              default: {
+                _this.nodes = "";
+              }
+            }
+            _this.drawNodes();
+          }
+        });
     },
     searchLink(param) {
       let _this = this;
@@ -100,6 +145,75 @@ export default {
         }
       }
     },
+    drawNodes() {
+      let myChart = echarts.init(
+        document.getElementsByClassName("graph-fig")[0]
+      );
+      let option = {
+        tooltip: {
+          show: true,
+        },
+        toolbox: {
+          show: true,
+          showTitle: false, // 隐藏默认文字，否则两者位置会重叠
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: "Save As Image",
+            },
+            restore: {
+              show: true,
+            },
+          },
+        },
+        series: [
+          {
+            name: Object.keys(this.nodes[0])[0],
+            type: "graph",
+            legendHoverLink: true,
+            layout: "force",
+            data: Object.values(this.nodes[0])[0], //取出value值
+            roam: true,
+            draggable: true,
+            force: {
+              repulsion: 200,
+              edgeLength: [50, 250],
+              gravity: 0.05,
+            },
+            symbolSize: 75, //节点大小设置,
+            itemStyle: {
+              color: function (params) {
+                //节点颜色设置
+                switch (params.seriesName) {
+                  case "时间":
+                    return "indianred";
+                  case "地点":
+                    return "#EE451F";
+                  case "情感属性":
+                    return "#368cbf";
+                  case "媒体类型":
+                    return "#63b931";
+                }
+              },
+            },
+            emphasis: { focus: "adjacency" }, //鼠标移到节点上时突出显示结点以及邻节点和边
+            label: {
+              //节点上的数据
+              show: true, //是否显示标签
+              color: "#fff",
+              formatter: function (params) {
+                return params.data;
+              },
+            },
+          },
+        ],
+      };
+      myChart.resize();
+      myChart.setOption(option);
+    },
+  },
+  mounted() {
+    this.searchNode("time");
   },
 };
 </script>

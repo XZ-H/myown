@@ -87,127 +87,125 @@ export default {
   methods: {
     getData() {
       let _this = this;
-      this.axios
-        .get("http://rap2api.taobao.org/app/mock/277253/api/index")
-        .then((res) => {
-          if (res.status === 200) {
-            let resp = res.data.data.row1; //第一行所需数据
-            let respo = res.data.data.row2;
-            //处理第一行所需数据
-            //chart--legend
-            let legend = Object.keys(resp[0]);
-            for (let i in legend) {
-              if (legend[i] === "date") legend.splice(i, 1); //删除不需要的数据时间，因为它是x轴
-            }
-            for (let i in legend) {
-              switch (legend[i]) {
-                case "infectedNum":
-                  legend[i] = "感染人数";
-                  break;
-                case "curedNum":
-                  legend[i] = "治愈人数";
-                  break;
-                case "deadNum":
-                  legend[i] = "死亡人数";
-                  break;
-              }
-            }
-            _this.chartData1.push({
-              legend: legend,
-            });
-            //chart-other
-            let xData = [],
-              infected = [],
-              cured = [],
-              dead = [],
-              seriersData = [];
-            for (let i = 0; i < resp.length; i++) {
-              for (let j in resp[i]) {
-                switch (j) {
-                  case "date":
-                    xData.push(resp[i][j]); //日期：x轴
-                    break;
-
-                  case "infectedNum":
-                    infected.push(resp[i][j]); //感人人数：line1
-                    break;
-
-                  case "curedNum":
-                    cured.push(resp[i][j]); //治愈人数：line2
-                    break;
-
-                  case "deadNum":
-                    dead.push(resp[i][j]); //死亡人数：line3
-                    break;
-                }
-              }
-            }
-            seriersData.push(
-              {
-                infectedNum: infected,
-              },
-              {
-                curedNum: cured,
-              },
-              {
-                deadNum: dead,
-              }
-            );
-            _this.chartData1.push(
-              {
-                xAxisData: xData, //x轴数据
-              },
-              {
-                seriersData: seriersData, //y轴数据
-              }
-            );
-            _this.tableData1 = resp; //表格所用数据
-
-            //处理第二行数据
-            let emtion = "", //显示类型 --emotional_attribute
-              temp = {}, //计数，计算其出现的次数
-              media = "", //同上 --media_type
-              temp1 = {};
-            for (let i = 0; i < respo.length; i++) {
-              if (respo[i].abstract.length >= 30) {
-                respo[i].abstract = respo[i].abstract.substr(0, 30) + "...";
-              }
-
-              //统计
-              emtion = respo[i].emotional_attribute;
-              if (temp[emtion]) {
-                temp[emtion]++;
-              } else {
-                temp[emtion] = 1;
-              }
-
-              media = respo[i].media_type;
-              if (temp1[media]) {
-                temp1[media]++;
-              } else {
-                temp1[media] = 1;
-              }
-            }
-            for (let i in temp) {
-              _this.chartData2_1.push({
-                name: i,
-                value: temp[i],
-              });
-            }
-            for (let i in temp1) {
-              _this.chartData2_2.push({
-                name: i,
-                value: temp1[i],
-              });
-            }
-            _this.tableData2 = respo;
+      this.axios.get("/api/index").then((res) => {
+        if (res.status === 200) {
+          let resp = res.data.data.row1; //第一行所需数据
+          let respo = res.data.data.row2;
+          //处理第一行所需数据
+          //chart--legend
+          let legend = Object.keys(resp[0]);
+          for (let i in legend) {
+            if (legend[i] === "date") legend.splice(i, 1); //删除不需要的数据时间，因为它是x轴
           }
+          for (let i in legend) {
+            switch (legend[i]) {
+              case "infectedNum":
+                legend[i] = "感染人数";
+                break;
+              case "curedNum":
+                legend[i] = "治愈人数";
+                break;
+              case "deadNum":
+                legend[i] = "死亡人数";
+                break;
+            }
+          }
+          _this.chartData1.push({
+            legend: legend,
+          });
+          //chart-other
+          let xData = [],
+            infected = [],
+            cured = [],
+            dead = [],
+            seriersData = [];
+          for (let i = 0; i < resp.length; i++) {
+            for (let j in resp[i]) {
+              switch (j) {
+                case "date":
+                  xData.push(resp[i][j]); //日期：x轴
+                  break;
 
-          //画图
-          _this.drawChart1();
-          _this.drawChart2_1();
-          _this.drawChart2_2();
-        });
+                case "infectedNum":
+                  infected.push(resp[i][j]); //感人人数：line1
+                  break;
+
+                case "curedNum":
+                  cured.push(resp[i][j]); //治愈人数：line2
+                  break;
+
+                case "deadNum":
+                  dead.push(resp[i][j]); //死亡人数：line3
+                  break;
+              }
+            }
+          }
+          seriersData.push(
+            {
+              infectedNum: infected,
+            },
+            {
+              curedNum: cured,
+            },
+            {
+              deadNum: dead,
+            }
+          );
+          _this.chartData1.push(
+            {
+              xAxisData: xData, //x轴数据
+            },
+            {
+              seriersData: seriersData, //y轴数据
+            }
+          );
+          _this.tableData1 = resp; //表格所用数据
+
+          //处理第二行数据
+          let emtion = "", //显示类型 --emotional_attribute
+            temp = {}, //计数，计算其出现的次数
+            media = "", //同上 --media_type
+            temp1 = {};
+          for (let i = 0; i < respo.length; i++) {
+            if (respo[i].abstract.length >= 30) {
+              respo[i].abstract = respo[i].abstract.substr(0, 30) + "...";
+            }
+
+            //统计
+            emtion = respo[i].emotional_attribute;
+            if (temp[emtion]) {
+              temp[emtion]++;
+            } else {
+              temp[emtion] = 1;
+            }
+
+            media = respo[i].media_type;
+            if (temp1[media]) {
+              temp1[media]++;
+            } else {
+              temp1[media] = 1;
+            }
+          }
+          for (let i in temp) {
+            _this.chartData2_1.push({
+              name: i,
+              value: temp[i],
+            });
+          }
+          for (let i in temp1) {
+            _this.chartData2_2.push({
+              name: i,
+              value: temp1[i],
+            });
+          }
+          _this.tableData2 = respo;
+        }
+
+        //画图
+        _this.drawChart1();
+        _this.drawChart2_1();
+        _this.drawChart2_2();
+      });
     },
     drawChart1() {
       let myChart = echarts.init(document.getElementById("box-right-chart1"));
@@ -369,7 +367,7 @@ export default {
       let myChart = echarts.init(document.getElementById("box-right-chart2-1"));
       let option = {
         title: {
-          text: "情感属性",
+          text: this.elBtnText,
           left: "center",
           top: "47%",
           textStyle: {

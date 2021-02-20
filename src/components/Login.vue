@@ -71,7 +71,7 @@ export default {
           let _this = this;
           this.axios({
             method: "post",
-            url: "http://rap2api.taobao.org/app/mock/277253/api/login",
+            url: "/api/login",
             data: _this.form,
           })
             .then((res) => {

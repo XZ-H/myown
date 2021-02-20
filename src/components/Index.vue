@@ -63,13 +63,25 @@
       <el-row id="innerBox-top" class="distributed">{{
         innerBoxTop4_text
       }}</el-row>
-      <div id="box-right-chart2-1"></div>
-      <div id="box-right-chart2-2"></div>
+      <div id="box-right-chart2"></div>
     </div>
   </div>
 </template>
 <script>
-import * as echarts from "echarts";
+// import * as echarts from "echarts";
+//引入基本模板
+let echarts = require("echarts/lib/echarts");
+
+//引入图形类型
+require("echarts/lib/chart/pie");
+require("echarts/lib/chart/line");
+
+//引入使用组件tooltip、toolbox等
+require("echarts/lib/component/tooltip");
+require("echarts/lib/component/toolbox");
+require("echarts/lib/component/legend");
+require("echarts/lib/component/grid");
+
 export default {
   name: "index",
   data() {
@@ -77,8 +89,7 @@ export default {
       tableData1: [], //第一行表格数据
       chartData1: [], //第一行图表数据
       tableData2: [], //第二行表格数据
-      chartData2_1: [], //第二行图表数据2_1,emtional_attribute
-      chartData2_2: [], //第二行图表数据2_2,media_type
+      chartData2: [], //第二行图表数据2_1,emtional_attribute
       elBtnText: "情感属性",
       show: "emotional_attribute", //显示哪一列，初始为情感属性
       innerBoxTop4_text: "情感属性分布",
@@ -162,49 +173,17 @@ export default {
           _this.tableData1 = resp; //表格所用数据
 
           //处理第二行数据
-          let emtion = "", //显示类型 --emotional_attribute
-            temp = {}, //计数，计算其出现的次数
-            media = "", //同上 --media_type
-            temp1 = {};
           for (let i = 0; i < respo.length; i++) {
             if (respo[i].abstract.length >= 30) {
               respo[i].abstract = respo[i].abstract.substr(0, 30) + "...";
             }
-
-            //统计
-            emtion = respo[i].emotional_attribute;
-            if (temp[emtion]) {
-              temp[emtion]++;
-            } else {
-              temp[emtion] = 1;
-            }
-
-            media = respo[i].media_type;
-            if (temp1[media]) {
-              temp1[media]++;
-            } else {
-              temp1[media] = 1;
-            }
-          }
-          for (let i in temp) {
-            _this.chartData2_1.push({
-              name: i,
-              value: temp[i],
-            });
-          }
-          for (let i in temp1) {
-            _this.chartData2_2.push({
-              name: i,
-              value: temp1[i],
-            });
           }
           _this.tableData2 = respo;
         }
 
         //画图
         _this.drawChart1();
-        _this.drawChart2_1();
-        _this.drawChart2_2();
+        // _this.drawChart2_2();
       });
     },
     drawChart1() {
@@ -363,20 +342,9 @@ export default {
       myChart.resize();
       myChart.setOption(option);
     },
-    drawChart2_1() {
-      let myChart = echarts.init(document.getElementById("box-right-chart2-1"));
+    drawChart2() {
+      let myChart = echarts.init(document.getElementById("box-right-chart2"));
       let option = {
-        title: {
-          text: this.elBtnText,
-          left: "center",
-          top: "47%",
-          textStyle: {
-            fontSize: 12,
-            color: "#3C4353",
-            fontStyle: "normal",
-            fontWeight: "400",
-          },
-        },
         color: [
           "#7eacea",
           "#e15777",
@@ -392,7 +360,7 @@ export default {
         },
         series: [
           {
-            name: "情感属性分布",
+            name: this.innerBoxTop4_text,
             type: "pie",
             radius: [30, 110],
             center: ["50%", "50%"],
@@ -406,57 +374,7 @@ export default {
                 show: true,
               },
             },
-            data: this.chartData2_1,
-          },
-        ],
-      };
-      myChart.resize();
-      myChart.setOption(option);
-    },
-    drawChart2_2() {
-      let myChart = echarts.init(document.getElementById("box-right-chart2-2"));
-      let option = {
-        title: {
-          text: "媒体类型",
-          left: "center",
-          top: "47%",
-          textStyle: {
-            fontSize: 12,
-            color: "#3C4353",
-            fontStyle: "normal",
-            fontWeight: "400",
-          },
-        },
-        color: [
-          "#7eacea",
-          "#e15777",
-          "#95ea71",
-          "#ea9b4f",
-          "#7577df",
-          "#be72d8",
-          "#fff",
-        ],
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b} : {c} ({d}%)",
-        },
-        series: [
-          {
-            name: "媒体类型分布",
-            type: "pie",
-            radius: [30, 110],
-            center: ["50%", "50%"],
-            roseType: "radius",
-            label: {
-              show: true,
-              formatter: "{d}%",
-            },
-            emphasis: {
-              label: {
-                show: true,
-              },
-            },
-            data: this.chartData2_2,
+            data: this.chartData2,
           },
         ],
       };
@@ -464,28 +382,56 @@ export default {
       myChart.setOption(option);
     },
     classify(param) {
-      switch (param) {
-        case "media_type": {
-          this.elBtnText = "媒体类型";
-          this.show = "media_type";
-          this.innerBoxTop4_text = "媒体类型分布";
-          document.getElementById("box-right-chart2-1").style.display = "none";
-          document.getElementById("box-right-chart2-2").style.display = "block";
-          break;
+      let name = "", //存储时的key值
+        temp = [], //统计各name出现次数后暂存于该变量
+        _this = this;
+
+      this.axios.get("/api/index", { type: param }).then((res) => {
+        if (res.status === 200) {
+          let respon = res.data.data.row2;
+          for (var i in respon) {
+            switch (res.config.type) {
+              case "media_type": {
+                _this.elBtnText = "媒体类型";
+                this.show = "media_type";
+                _this.innerBoxTop4_text = "媒体类型分布";
+                name = respon[i].media_type;
+                if (temp[name]) {
+                  temp[name]++;
+                } else {
+                  temp[name] = 1;
+                }
+                break;
+              }
+              case "emotional_attribute": {
+                _this.elBtnText = "情感属性";
+                this.show = "emotional_attribute";
+                _this.innerBoxTop4_text = "情感属性分布";
+                name = respon[i].emotional_attribute;
+                if (temp[name]) {
+                  temp[name]++;
+                } else {
+                  temp[name] = 1;
+                }
+                break;
+              }
+            }
+          }
+          _this.chartData2 = [];
+          for (let i in temp) {
+            _this.chartData2.push({
+              name: i,
+              value: temp[i],
+            });
+          }
+          _this.drawChart2();
         }
-        case "emotional_attribute": {
-          this.elBtnText = "情感属性";
-          this.show = "emotional_attribute";
-          this.innerBoxTop4_text = "情感属性分布";
-          document.getElementById("box-right-chart2-2").style.display = "none";
-          document.getElementById("box-right-chart2-1").style.display = "block";
-          break;
-        }
-      }
+      });
     },
   },
   mounted() {
     this.getData();
+    this.classify("emotional_attribute");
   },
 };
 </script>
@@ -520,7 +466,7 @@ export default {
   width: 500px;
   height: 370px;
 }
-#box-right-chart2-1,
+#box-right-chart2,
 #box-right-chart2-2 {
   margin: 15px auto;
   width: 500px;

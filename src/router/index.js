@@ -6,6 +6,8 @@ import Register from "@/components/Register";
 import Index from "@/components/Index";
 import Graph from "@/components/Graph";
 import Mine from "@/components/Mine";
+import WebIndex from "@/components/WebIndex";
+
 Vue.use(Router);
 
 const router = new Router({
@@ -13,7 +15,12 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      redirect: "/login",
+      redirect: "/webIndex",
+    },
+    {
+      path: "/webIndex",
+      name: "webIndex",
+      component: WebIndex,
     },
     {
       path: "/login",

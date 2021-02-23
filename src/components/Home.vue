@@ -11,7 +11,7 @@
               class="col"
               custom
               v-slot="{ href, navigate, isActive }"
-              v-for="(item, index) in $router.options.routes[2].children"
+              v-for="(item, index) in $router.options.routes[3].children"
               :key="index + 1"
               :to="item.path"
               exact

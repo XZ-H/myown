@@ -68,7 +68,6 @@
   </div>
 </template>
 <script>
-// import * as echarts from "echarts";
 //引入基本模板
 let echarts = require("echarts/lib/echarts");
 
@@ -87,12 +86,13 @@ export default {
   data() {
     return {
       tableData1: [], //第一行表格数据
-      chartData1: [], //第一行图表数据
+      chartData1: [], //第一行图数据
       tableData2: [], //第二行表格数据
-      chartData2: [], //第二行图表数据2_1,emtional_attribute
+      chartData2: [], //第二行图数据
       elBtnText: "情感属性",
       show: "emotional_attribute", //显示哪一列，初始为情感属性
       innerBoxTop4_text: "情感属性分布",
+      timer: "", //定时器，定时更新数据
     };
   },
   methods: {
@@ -432,6 +432,13 @@ export default {
   mounted() {
     this.getData();
     this.classify("emotional_attribute");
+    this.timer = setInterval(() => {
+      this.getData();
+      this.classify("emotional_attribute");
+    }, 60 * 60 * 1000); //每隔一小时刷新一次
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 };
 </script>

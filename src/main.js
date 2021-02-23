@@ -11,6 +11,8 @@ Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 Vue.use(VueAxios, axios);
+
+//axios拦截器
 axios.interceptors.request.use(
   (config) => {
     if (localStorage.getItem("Authorization")) {

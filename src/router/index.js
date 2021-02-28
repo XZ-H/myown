@@ -7,6 +7,7 @@ import Index from "@/components/Index";
 import Graph from "@/components/Graph";
 import Mine from "@/components/Mine";
 import WebIndex from "@/components/WebIndex";
+import Analyze from "@/components/Analyze";
 
 Vue.use(Router);
 
@@ -37,6 +38,11 @@ const router = new Router({
           path: "/index",
           name: "首页总览",
           component: Index,
+        },
+        {
+          path: "/analyze",
+          name: "回溯分析",
+          component: Analyze,
         },
         {
           path: "/graph",

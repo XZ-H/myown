@@ -99,7 +99,7 @@ export default {
   background-color: #e9e9ea;
   color: #333;
   margin: 0;
-  padding: 0 !important;
+  padding: 0;
 }
 body > .el-container {
   margin-bottom: 40px;

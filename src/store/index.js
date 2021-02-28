@@ -8,9 +8,14 @@ export const store = new Vuex.Store({
     Authorization: localStorage.getItem("Authorization")
       ? localStorage.getItem("Authorization")
       : "",
+    // 存储username
     Username: localStorage.getItem("Username")
       ? localStorage.getItem("Username")
       : "",
+    // 存储navData--Analyze组件
+    navData: ["信息汇总", "微博分析", "微信分析"],
+    //存储emotion conditions--Analyze组件
+    emotions: ["全部", "正面", "中性", "负面"],
   },
   getters: {
     getUname: (state) => {

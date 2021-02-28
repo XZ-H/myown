@@ -133,7 +133,7 @@ nav li {
 }
 nav li a {
   text-decoration: none;
-  color: #333;
+  color: #fff;
 }
 .active {
   background-color: #1f6ed4;
@@ -142,7 +142,7 @@ nav li a {
 .nav-border {
   width: 1px;
   display: inline-block;
-  background-color: #333;
+  background-color: #65b4f1;
   margin-right: 15px;
   height: 15px;
   position: absolute;

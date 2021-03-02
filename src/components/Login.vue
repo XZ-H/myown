@@ -75,34 +75,24 @@ export default {
             data: _this.form,
           })
             .then((res) => {
-              if (res.data.message === "sucess") {
-                var resp = res.data.data,
-                  len = resp.length,
-                  usrArr = [], //存储用户名
-                  pwdArr = [], //存储相应密码
-                  roleArr = []; //存储相应得角色
-                for (let i = 0; i < len; i++) {
-                  usrArr.push(resp[i].username);
-                  pwdArr.push(resp[i].password);
-                  roleArr.push(resp[i].role);
-                }
-                if (usrArr.indexOf(_this.form.name) === -1) {
-                  alert("用户不存在");
-                } else {
-                  var index = usrArr.indexOf(_this.form.name);
-                  if (pwdArr[index] === _this.form.password) {
-                    _this.userToken = "Pom " + resp[index].token;
-                    // 将用户token保存到vuex中
-                    _this.$store.commit("changeLogin", {
-                      Authorization: _this.userToken,
-                    });
-                    _this.$store.dispatch("setUserInfo", {
-                      Username: _this.form.name,
-                    });
-                    _this.$router.push("/home");
-                  } else {
-                    alert("密码错误");
-                  }
+              switch (res.data.code) {
+                case 0:
+                  alert("用户还未注册，请先注册您的账号");
+                  break;
+                case 1:
+                  alert("您输入的密码有误，请重新输入");
+                  break;
+                case 2: {
+                  _this.userToken = "Pom " + res.data.token;
+                  // 将用户token保存到vuex中
+                  _this.$store.commit("changeLogin", {
+                    Authorization: _this.userToken,
+                  });
+                  _this.$store.dispatch("setUserInfo", {
+                    Username: _this.form.name,
+                  });
+                  _this.$router.push("/home");
+                  break;
                 }
               }
             })

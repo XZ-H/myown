@@ -112,20 +112,27 @@ export default {
           let _this = this;
           this.axios({
             method: "post",
-            url: "http://rap2api.taobao.org/app/mock/277253/api/register",
+            url: "/api/register",
             data: _this.registerForm,
           }).then((res) => {
-            if (res.data.status === 200) {
-              setTimeout(() => {
-                let r = confirm(
-                  '注册成功！点击"确定"跳转至登录页，点击"取消"返回至当前页'
-                );
-                if (r) {
-                  _this.$router.push("./login");
-                } else {
-                  window.location.reload();
-                }
-              }, 400);
+            switch (res.data.code) {
+              case 0:
+                alert("用户名已存在，请重新注册");
+                break;
+
+              case 1: {
+                setTimeout(() => {
+                  let r = confirm(
+                    '注册成功！点击"确定"跳转至登录页，点击"取消"返回至当前页'
+                  );
+                  if (r) {
+                    _this.$router.push("./login");
+                  } else {
+                    window.location.reload();
+                  }
+                }, 400);
+                break;
+              }
             }
           });
         } else {

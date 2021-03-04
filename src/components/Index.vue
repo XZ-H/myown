@@ -2,7 +2,7 @@
   <div id="pom-index">
     <div id="pom-index-box" class="box-left">
       <el-row id="innerBox-top">疫情信息统计</el-row>
-      <el-table :data="tableData1" style="width: 100%">
+      <el-table :data="Epi_table" style="width: 100%">
         <el-table-column prop="date" label="日期"> </el-table-column>
         <el-table-column prop="infectedNum" label="感染人数"></el-table-column>
         <el-table-column prop="curedNum" label="治愈人数"></el-table-column>
@@ -15,7 +15,7 @@
     </div>
     <div id="pom-index-box" class="box-left row2">
       <el-row id="innerBox-top"
-        >舆情信息
+        >最新舆情信息
         <div
           style="
             position: absolute;
@@ -42,7 +42,7 @@
         </div>
       </el-row>
       <el-table
-        :data="tableData2"
+        :data="Last_table"
         style="width: 100%"
         max-height="331px"
         border
@@ -54,6 +54,7 @@
             }}</a>
           </template>
         </el-table-column>
+        <el-table-column prop="ago" label="相隔时长"></el-table-column>
         <el-table-column
           prop="media_type"
           label="媒体类型"
@@ -73,9 +74,9 @@
       <div id="box-right-chart2"></div>
     </div>
     <div id="pom-index-box" class="box-left">
-      <el-row id="innerBox-top">重要舆情</el-row>
+      <el-row id="innerBox-top">重要舆情信息</el-row>
       <el-table
-        :data="tableData3"
+        :data="Imp_table"
         style="width: 100%"
         :show-header="false"
         border
@@ -151,142 +152,12 @@ export default {
   name: "index",
   data() {
     return {
-      tableData1: [], //第一行表格数据
-      chartData1: [], //第一行图数据
-      tableData2: [], //第二行表格数据
-      chartData2: [], //第二行图数据
-      tableData3: [
-        {
-          media_type: "客户端",
-          media_name: "史回乡站",
-          abstract:
-            "13日晚，黑龙江省召开疫情防控新闻发布会，对疫情防控相关情况进行通报。黑龙江省卫健委副主任方庆伟在发布会上通报，1月13日0时至19时，黑龙江全省新增新冠肺炎确诊病例40例，其中绥化市望奎县36例，哈尔滨市香坊区2例，绥化市北临区2例无症状感染者订正为确诊病例。",
-          original_link:
-            "https://tznew.58.com/view/c/sharingDetailNew?infoid=177586871",
-        },
-        {
-          media_type: "网页",
-          media_name: "四川在线",
-          abstract:
-            "封面新闻记者 谢颖1月13日晚，巴中市巴州区应对新冠肺炎应急指挥部办公室发布最新公告。经多方努力，与该区新冠肺炎密切接触者裴某某的乘坐同一非营运车辆的司乘人员及火车同乘人员已全部找到，且隔离管控到位。",
-          original_link:
-            "https://sichuan.scol.com.cn/sczh/202101/58019797.html",
-        },
-        {
-          media_type: "微博",
-          media_name: "彩芸之南",
-          abstract:
-            "封面新闻记者 #日本将全面禁止外国人入境#紧急状态扩大至11个都府县】日本首相菅义伟13日晚在记者会上宣布，鉴于多国确认变异的新冠肺炎病毒，日本政府决定到2月7日为止，暂停中韩等11个国家和地区的商务人员往来。针对英国等国确认的变异病毒，日本政府上个月采取了暂停了多个国家和地区的新的外国人入境的措施",
-          original_link:
-            "http://weibo.com/2715239797/JD5As2HnE?refer_flag=1001030103_",
-        },
-        {
-          media_type: "微信",
-          media_name: "新津三农",
-          abstract:
-            "致全区广大农民群众的一封信广大农民朋友们：春节将至，新冠肺炎疫情防控形势依然严峻，为了您和家人的健康平安，为了社会的和谐稳定，为了巩固来之不易的防疫成果，我们发出如下倡议：1非必要，不返乡请广大农民群众服从大局，建议您的家人留在务工地过年，既减轻疫情防控压力，又减少来回奔波劳累。确需返乡的，建议错峰出行，选择自驾或者乘坐集中组织的专列、专车出行。",
-          original_link:
-            "http://mp.weixin.qq.com/s?__biz=MzI0MzE3MTA1MA==&mid=2654312827&idx=2&sn=1d8fb02d4ac3d9757c1d35fa03870907&scene=0",
-        },
-      ], //第三行表格数据
-      chartData3: [
-        {
-          name: "十九大精神",
-          value: 15000,
-        },
-        {
-          name: "两学一做",
-          value: 10081,
-        },
-        {
-          name: "中华民族",
-          value: 9386,
-        },
-        {
-          name: "马克思主义",
-          value: 7500,
-        },
-        {
-          name: "民族复兴",
-          value: 7500,
-        },
-        {
-          name: "社会主义制度",
-          value: 6500,
-        },
-        {
-          name: "国防白皮书",
-          value: 6500,
-        },
-        {
-          name: "创新",
-          value: 6000,
-        },
-        {
-          name: "民主革命",
-          value: 4500,
-        },
-        {
-          name: "文化强国",
-          value: 3800,
-        },
-        {
-          name: "国家主权",
-          value: 3000,
-        },
-        {
-          name: "伟大复兴",
-          value: 2500,
-        },
-        {
-          name: "领土完整",
-          value: 2300,
-        },
-        {
-          name: "安全",
-          value: 2000,
-        },
-        {
-          name: "从严治党",
-          value: 1900,
-        },
-        {
-          name: "现代化经济体系",
-          value: 1800,
-        },
-        {
-          name: "国防动员",
-          value: 1700,
-        },
-        {
-          name: "信息化战争",
-          value: 1600,
-        },
-        {
-          name: "局部战争",
-          value: 1500,
-        },
-        {
-          name: "教育",
-          value: 1200,
-        },
-        {
-          name: "中国梦",
-          value: 1100,
-        },
-        {
-          name: "孙子兵法",
-          value: 900,
-        },
-        {
-          name: "一国两制",
-          value: 800,
-        },
-        {
-          name: "特色社会主义思想",
-          value: 700,
-        },
-      ],
+      Epi_table: [], //第一行表格数据
+      Epi_chart: [], //第一行图数据
+      Last_table: [], //第二行表格数据
+      Last_chart: [], //第二行图数据
+      Imp_table: [], //第三行表格数据
+      Imp_chart: [],
       elBtnText: "情感属性",
       show: "emotional_attribute", //显示哪一列，初始为情感属性
       innerBoxTop4_text: "情感属性分布",
@@ -294,99 +165,218 @@ export default {
     };
   },
   methods: {
-    getData() {
+    //获取第一行数据
+    getEpidemicData() {
       let _this = this;
-      this.axios.get("/api/index").then((res) => {
-        if (res.status === 200) {
-          let resp = res.data.data.row1; //第一行所需数据
-          let respo = res.data.data.row2;
-          //处理第一行所需数据
-          //chart--legend
-          let legend = Object.keys(resp[0]);
-          for (let i in legend) {
-            if (legend[i] === "date") legend.splice(i, 1); //删除不需要的数据时间，因为它是x轴
-          }
-          for (let i in legend) {
-            switch (legend[i]) {
-              case "infectedNum":
-                legend[i] = "感染人数";
-                break;
-              case "curedNum":
-                legend[i] = "治愈人数";
-                break;
-              case "deadNum":
-                legend[i] = "死亡人数";
-                break;
+      this.axios
+        .get("/api/index", {
+          params: {
+            type: "epidemic",
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            let resp = res.data; //第一行所需数据
+            //处理第一行所需数据
+            //chart--legend
+            let legend = Object.keys(resp[0]);
+            for (let i in legend) {
+              if (legend[i] === "date") legend.splice(i, 1); //删除不需要的数据时间，因为它是x轴
             }
-          }
-          _this.chartData1.push({
-            legend: legend,
-          });
-          //chart-other
-          let xData = [],
-            infected = [],
-            cured = [],
-            dead = [],
-            seriersData = [];
-          for (let i = 0; i < resp.length; i++) {
-            for (let j in resp[i]) {
-              switch (j) {
-                case "date":
-                  xData.push(resp[i][j]); //日期：x轴
-                  break;
-
+            for (let i in legend) {
+              switch (legend[i]) {
                 case "infectedNum":
-                  infected.push(resp[i][j]); //感人人数：line1
+                  legend[i] = "感染人数";
                   break;
-
                 case "curedNum":
-                  cured.push(resp[i][j]); //治愈人数：line2
+                  legend[i] = "治愈人数";
                   break;
-
                 case "deadNum":
-                  dead.push(resp[i][j]); //死亡人数：line3
+                  legend[i] = "死亡人数";
                   break;
               }
             }
+            _this.Epi_chart.push({
+              legend: legend,
+            });
+            //chart-other
+            let xData = [],
+              infected = [],
+              cured = [],
+              dead = [],
+              seriersData = [];
+            for (let i = 0; i < resp.length; i++) {
+              for (let j in resp[i]) {
+                switch (j) {
+                  case "date":
+                    xData.push(resp[i][j]); //日期：x轴
+                    break;
+
+                  case "infectedNum":
+                    infected.push(resp[i][j]); //感人人数：line1
+                    break;
+
+                  case "curedNum":
+                    cured.push(resp[i][j]); //治愈人数：line2
+                    break;
+
+                  case "deadNum":
+                    dead.push(resp[i][j]); //死亡人数：line3
+                    break;
+                }
+              }
+            }
+            seriersData.push(
+              {
+                infectedNum: infected,
+              },
+              {
+                curedNum: cured,
+              },
+              {
+                deadNum: dead,
+              }
+            );
+            _this.Epi_chart.push(
+              {
+                xAxisData: xData, //x轴数据
+              },
+              {
+                seriersData: seriersData, //y轴数据
+              }
+            );
+            _this.Epi_table = resp; //表格所用数据
+
+            // //处理第二行数据
+            // _this.Last_table = respo;
           }
-          seriersData.push(
-            {
-              infectedNum: infected,
-            },
-            {
-              curedNum: cured,
-            },
-            {
-              deadNum: dead,
-            }
-          );
-          _this.chartData1.push(
-            {
-              xAxisData: xData, //x轴数据
-            },
-            {
-              seriersData: seriersData, //y轴数据
-            }
-          );
-          _this.tableData1 = resp; //表格所用数据
 
-          //处理第二行数据
-          _this.tableData2 = respo;
-        }
-
-        //画图
-        _this.drawChart1();
-        // _this.drawChart2_2();
-      });
+          //画图
+          _this.drawLineChart();
+          // _this.drawPieChart_2();
+        });
     },
-    drawChart1() {
+    // 获取第二行数据
+    classify(param) {
+      let name = "", //存储时的key值
+        temp = [], //统计各name出现次数后暂存于该变量
+        _this = this;
+      //注意axios.get携带参数时，key值必须是params，否则后端接收不到传参
+      this.axios
+        .get("/api/index", {
+          params: {
+            type: param,
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            let respon = res.data;
+            for (var i in respon) {
+              switch (res.config.params.type) {
+                case "media_type": {
+                  _this.elBtnText = "媒体类型";
+                  this.show = "media_type";
+                  _this.innerBoxTop4_text = "媒体类型分布";
+                  name = respon[i].media_type;
+                  if (temp[name]) {
+                    temp[name]++;
+                  } else {
+                    temp[name] = 1;
+                  }
+                  break;
+                }
+                case "emotional_attribute": {
+                  _this.elBtnText = "情感属性";
+                  this.show = "emotional_attribute";
+                  _this.innerBoxTop4_text = "情感属性分布";
+                  name = respon[i].emotional_attribute;
+                  if (temp[name]) {
+                    temp[name]++;
+                  } else {
+                    temp[name] = 1;
+                  }
+                  break;
+                }
+              }
+            }
+            _this.Last_table = respon;
+            _this.Last_chart = [];
+            for (let i in temp) {
+              _this.Last_chart.push({
+                name: i,
+                value: temp[i],
+              });
+            }
+            _this.drawPieChart();
+          }
+        });
+    },
+    // 获取第三行数据
+    getImportantPoData() {
+      let _this = this;
+      this.axios
+        .get("/api/index", {
+          params: {
+            type: "important",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          let rowThree = res.data;
+          //给表格赋值,传递数据
+          _this.Imp_table = rowThree;
+
+          //给词云图传递数据
+          let tempArr = [];
+          for (let i = 0; i < rowThree.length; i++) {
+            //   // wordFrequency.push()
+            let t = rowThree[i].topic_term.split(" ");
+            for (let item in t) {
+              t[item] = t[item].replace("（", ":");
+              t[item] = t[item].replace("）", "");
+            }
+            for (let j in t) {
+              let arr = t[j].split(":");
+              tempArr.push({
+                name: arr[0],
+                value: Number(arr[1]),
+              });
+            }
+          }
+          // console.log(wordFrequency);
+          let tempDict = {};
+          for (let i in tempArr) {
+            let key = tempArr[i].name;
+            if (tempDict[key]) {
+              tempDict[key].value += tempArr[i].value;
+              tempDict[key].name = tempArr[i].name;
+            } else {
+              tempDict[key] = {};
+              tempDict[key].name = tempArr[i].name;
+              tempDict[key].value = tempArr[i].value;
+            }
+          }
+          let wordFrequency = [];
+          for (let i in tempDict) {
+            wordFrequency.push({
+              name: tempDict[i].name,
+              value: tempDict[i].value,
+            });
+          }
+          // console.log(wordFrequency);
+          _this.Imp_chart = wordFrequency;
+          _this.drawWordChart();
+        });
+    },
+    //第一行折线图
+    drawLineChart() {
       let myChart = echarts.init(document.getElementById("box-right-chart1"));
       let option = {
         tooltip: {
           trigger: "axis",
         },
         legend: {
-          data: this.chartData1[0].legend, //chartData.legend
+          data: this.Epi_chart[0].legend, //chartData.legend
         },
         grid: {
           left: "3%",
@@ -401,7 +391,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false, //坐标轴两边留白
-          data: this.chartData1[1].xAxisData,
+          data: this.Epi_chart[1].xAxisData,
           axisLabel: {
             //坐标轴刻度标签的相关设置。
             interval: 0, //设置为 1，表示『隔一个标签显示一个标签』
@@ -480,7 +470,7 @@ export default {
                 },
               ]),
             },
-            data: this.chartData1[2].seriersData[0].infectedNum,
+            data: this.Epi_chart[2].seriersData[0].infectedNum,
           },
           {
             name: "治愈人数",
@@ -504,7 +494,7 @@ export default {
                 },
               ]),
             },
-            data: this.chartData1[2].seriersData[1].curedNum,
+            data: this.Epi_chart[2].seriersData[1].curedNum,
           },
           {
             name: "死亡人数",
@@ -528,14 +518,15 @@ export default {
                 },
               ]),
             },
-            data: this.chartData1[2].seriersData[2].deadNum,
+            data: this.Epi_chart[2].seriersData[2].deadNum,
           },
         ],
       };
       myChart.resize();
       myChart.setOption(option);
     },
-    drawChart2() {
+    // 第二行饼图
+    drawPieChart() {
       let myChart = echarts.init(document.getElementById("box-right-chart2"));
       let option = {
         title: {
@@ -549,9 +540,9 @@ export default {
           },
         },
         color: [
-          "#7eacea",
-          "#e15777",
-          "#95ea71",
+          "#e15777", //负面
+          "#7eacea", //中性
+          "#95ea71", //正面
           "#ea9b4f",
           "#7577df",
           "#be72d8",
@@ -570,68 +561,22 @@ export default {
             roseType: "radius",
             label: {
               show: true,
-              formatter: "{d}%",
+              formatter: "{b}:{d}%",
             },
             emphasis: {
               label: {
                 show: true,
               },
             },
-            data: this.chartData2,
+            data: this.Last_chart,
           },
         ],
       };
       myChart.resize();
       myChart.setOption(option);
     },
-    classify(param) {
-      let name = "", //存储时的key值
-        temp = [], //统计各name出现次数后暂存于该变量
-        _this = this;
-
-      this.axios.get("/api/index", { type: param }).then((res) => {
-        if (res.status === 200) {
-          let respon = res.data.data.row2;
-          for (var i in respon) {
-            switch (res.config.type) {
-              case "media_type": {
-                _this.elBtnText = "媒体类型";
-                this.show = "media_type";
-                _this.innerBoxTop4_text = "媒体类型分布";
-                name = respon[i].media_type;
-                if (temp[name]) {
-                  temp[name]++;
-                } else {
-                  temp[name] = 1;
-                }
-                break;
-              }
-              case "emotional_attribute": {
-                _this.elBtnText = "情感属性";
-                this.show = "emotional_attribute";
-                _this.innerBoxTop4_text = "情感属性分布";
-                name = respon[i].emotional_attribute;
-                if (temp[name]) {
-                  temp[name]++;
-                } else {
-                  temp[name] = 1;
-                }
-                break;
-              }
-            }
-          }
-          _this.chartData2 = [];
-          for (let i in temp) {
-            _this.chartData2.push({
-              name: i,
-              value: temp[i],
-            });
-          }
-          _this.drawChart2();
-        }
-      });
-    },
-    drawChart3() {
+    // 第三行词云图
+    drawWordChart() {
       let myChart = echarts.init(document.getElementById("box-right-chart3"));
       let option = {
         backgroundColor: "#fff",
@@ -682,7 +627,7 @@ export default {
             width: "100%",
             height: "100%",
             //数据
-            data: this.chartData3,
+            data: this.Imp_chart,
           },
         ],
       };
@@ -690,12 +635,13 @@ export default {
     },
   },
   mounted() {
-    this.getData();
-    this.drawChart3();
+    this.getEpidemicData();
     this.classify("emotional_attribute");
+    this.getImportantPoData();
     this.timer = setInterval(() => {
-      this.getData();
+      this.getEpidemicData();
       this.classify("emotional_attribute");
+      this.getImportantPoData();
     }, 60 * 60 * 1000); //每隔一小时刷新一次
   },
   beforeDestroy() {

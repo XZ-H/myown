@@ -69,7 +69,10 @@
         style="width: 100%"
         :show-header="false"
       >
-        <el-table-column prop="[date,name,address,type]" label="内容">
+        <el-table-column
+          prop="[media_type,media_name,title,abstract,number_of_similar_articles,original_link,topic_term,emotional_attribute,release_time]"
+          label="内容"
+        >
           <template slot-scope="scope">
             <div class="content-row1">
               <!-- 内容第一行属性标签 -->
@@ -84,28 +87,82 @@
               >
                 <el-tag
                   :class="[
-                    scope.row.type === '正面' ? 'positive' : '',
-                    scope.row.type === '中性' ? 'neutral' : '',
-                    scope.row.type === '负面' ? 'negtive' : '',
+                    scope.row.emotional_attribute === '正面' ? 'positive' : '',
+                    scope.row.emotional_attribute === '中性' ? 'neutral' : '',
+                    scope.row.emotional_attribute === '负面' ? 'negtive' : '',
                   ]"
                   disable-transitions
-                  >{{ scope.row.type }}</el-tag
+                  >{{ scope.row.emotional_attribute }}</el-tag
                 >
               </div>
               <!-- 内容第一行属性标签end -->
 
               <!-- 内容第一行title -->
               <div class="content-title">
-                {{ scope.row.name }}
+                <a :href="scope.row.original_link">
+                  {{ scope.row.title }}
+                </a>
               </div>
               <!-- 内容第一行end -->
             </div>
 
             <!-- 内容第二行详情描述description -->
-            <div class="content-desc">
-              {{ scope.row.date }}&nbsp;&nbsp;{{ scope.row.address }}
+            <div class="content-row2">
+              {{ scope.row.abstract }}
+              <span class="similar-num"
+                >相似文章：{{ scope.row.number_of_similar_articles }}</span
+              >
             </div>
             <!-- 内容第二行end -->
+            <!-- 内容第三行 -->
+            <div class="content-row3">
+              <div class="content-topic">
+                主题词：{{ scope.row.topic_term }}
+              </div>
+              <div class="content-origin">
+                <span style="font-weight: 600; font-size: small">来源：</span
+                ><img
+                  v-if="scope.row.media_type === '微信'"
+                  src="../assets/微信.png"
+                  alt="此处显示媒体类型"
+                />
+                <img
+                  v-if="scope.row.media_type === '微博'"
+                  src="../assets/微博.png"
+                  alt="此处显示媒体类型"
+                />
+                <img
+                  v-if="scope.row.media_type === '网页'"
+                  src="../assets/网页.png"
+                  alt="此处显示媒体类型"
+                />
+                <img
+                  v-if="scope.row.media_type === '客户端'"
+                  src="../assets/客户端.png"
+                  alt="此处显示媒体类型"
+                />
+                <img
+                  v-if="scope.row.media_type === '报刊'"
+                  src="../assets/报刊.png"
+                  alt="此处显示媒体类型"
+                />
+                <img
+                  v-if="scope.row.media_type === '论坛'"
+                  src="../assets/论坛.png"
+                  alt="此处显示媒体类型"
+                />
+                <img
+                  v-if="scope.row.media_type === '今日头条'"
+                  src="../assets/今日头条.png"
+                  alt="此处显示媒体类型"
+                />
+                <span style="color: #47a0e4">{{ scope.row.media_name }}</span>
+              </div>
+              <div class="content-time" style="float: right">
+                {{ scope.row.release_time }}
+              </div>
+            </div>
+            <!-- 内容第三行end -->
           </template>
         </el-table-column>
       </el-table>
@@ -122,6 +179,7 @@
           :total="tableData.length"
         >
         </el-pagination>
+        <!-- <span>共{{ tableData.length }}条</span> -->
       </div>
       <!-- 分页end -->
     </div>
@@ -136,67 +194,17 @@ export default {
   data() {
     return {
       isActive: "0",
-      selectTime: [new Date("2020-01-04"), new Date("2021-02-05")],
-      dateData: [],
-      emo_show: "0",
-      currentPage: 1,
-      size: 4,
-      tableData: [
+      selectTime: [new Date("2021-01-04"), new Date("2021-02-05")],
+      dateData: [
         {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          type: "正面",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          type: "负面",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          type: "正面",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-          type: "中性",
-        },
-        {
-          date: "2016-05-05",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1510 弄",
-          type: "正面",
-        },
-        {
-          date: "2016-05-07",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1512 弄",
-          type: "中性",
-        },
-        {
-          date: "2016-05-06",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          type: "负面",
-        },
-        {
-          date: "2016-05-08",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1511 弄",
-          type: "正面",
-        },
-        {
-          date: "2016-05-09",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1514 弄",
-          type: "正面",
+          startTime: "2020-01-04",
+          endTime: "2021-02-05",
         },
       ],
+      emo_show: "0",
+      currentPage: 1,
+      size: 10,
+      tableData: [],
     };
   },
   computed: {
@@ -215,12 +223,18 @@ export default {
             "block";
           break;
         }
-        default: {
-          // 其余项则不显示该部分
+        case 1: {
           document.getElementsByClassName("ana-search")[0].style.display =
             "none";
+          break;
+        }
+        case 2: {
+          document.getElementsByClassName("ana-search")[0].style.display =
+            "none";
+          break;
         }
       }
+      this.getContenData();
     },
     dateFormat(old_time) {
       //格式化日期数据
@@ -235,12 +249,51 @@ export default {
     },
     getDataByTime(times) {
       //将el-date-picker组件选择的日期数据进行数据格式数据转换
-      for (let i = 0; i < times.length; i++) {
-        this.dateData.push(this.dateFormat(times[i]));
-      }
+      this.dateData = [];
+      this.dateData.push({
+        startTime: this.dateFormat(times[0]),
+        endTime: this.dateFormat(times[1]),
+      });
+      this.getContenData();
     },
     getDataByEmo(emo) {
       this.emo_show = emo;
+      this.getContenData();
+    },
+    getContenData() {
+      let _this = this,
+        start = this.dateData[0]["startTime"],
+        end = this.dateData[0]["endTime"];
+      this.axios
+        .get("/api/analyze", {
+          params: {
+            startTime: start,
+            endTime: end,
+            emo: this.emo_show,
+            nav: this.isActive,
+          },
+        })
+        .then((res) => {
+          _this.showPaging(res.data.length);
+          //对abstract字段做数据处理,长度100以上的,截取前100个字符后末尾加'...';长度小于100,截取全部字符,后在末尾加'...'
+          for (let i in res.data) {
+            if (res.data[i]["abstract"].length >= 100) {
+              res.data[i]["abstract"] =
+                res.data[i]["abstract"].substr(0, 100) + "...";
+            } else {
+              res.data[i]["abstract"] =
+                res.data[i]["abstract"].substr(
+                  0,
+                  res.data[i]["abstract"].length
+                ) + "...";
+            }
+            if (res.data[i]["title"].indexOf("。") !== -1) {
+              let index = res.data[i]["title"].indexOf("。");
+              res.data[i]["title"] = res.data[i]["title"].substr(0, index);
+            }
+          }
+          _this.tableData = res.data;
+        });
     },
     filterTag(value, row) {
       return row.type === value;
@@ -251,9 +304,8 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
     },
-    showPaging() {
+    showPaging(len) {
       //判断是否显示分页模块。如果数据表长度大于分页size长度则显示；否则不显示
-      let len = this.tableData.length;
       if (len > this.size) {
         document.getElementsByClassName("content-paging")[0].style.display =
           "block";
@@ -264,7 +316,7 @@ export default {
     },
   },
   mounted() {
-    this.showPaging();
+    this.getContenData();
   },
 };
 </script>
@@ -348,7 +400,8 @@ ul .active {
   font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .content-row1,
-.content-desc {
+.content-row2,
+.content-row3 {
   margin: 10px;
   position: relative;
 }
@@ -372,16 +425,50 @@ ul .active {
 }
 
 .content-title {
-  font-size: 20px;
+  font-size: 16px;
   color: #000;
   margin-left: 10px;
   display: inline-block;
   position: absolute;
-  top: 3px;
+  top: 4px;
 }
-.content-desc {
+.el-table a {
+  color: #606266;
+  text-decoration-line: none;
+}
+.el-table a:hover,
+.el-table a:active {
+  color: #47a0e4;
+}
+.content-row2 {
   color: #808080;
+  width: 80%;
   font-weight: lighter;
+}
+.similar-num {
+  margin-left: 15px;
+  color: #47a0e4;
+}
+.content-topic {
+  font-weight: 600;
+  font-size: small;
+}
+.content-topic,
+.content-origin,
+.content-time {
+  display: inline-block;
+}
+.content-origin {
+  /* margin-left: 40%; */
+  /* float: right; */
+  position: absolute;
+  right: 20%;
+}
+.el-table img {
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+  vertical-align: middle;
 }
 .content-paging {
   text-align: center;

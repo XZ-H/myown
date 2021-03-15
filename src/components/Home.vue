@@ -31,9 +31,6 @@
               <el-dropdown-item @click.native="jump('logout')"
                 >退出登录</el-dropdown-item
               >
-              <el-dropdown-item @click.native="jump('mine')"
-                >个人中心</el-dropdown-item
-              >
             </el-dropdown-menu>
             <span style="margin-left: 10px; font-size: 16px">{{
               username
@@ -70,8 +67,6 @@ export default {
           this.$store.commit("del_user");
           this.$router.push("/login");
           break;
-        case "mine":
-          this.$router.push("/mine");
       }
     },
   },

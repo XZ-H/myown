@@ -5,7 +5,6 @@ import Home from "@/components/Home";
 import Register from "@/components/Register";
 import Index from "@/components/Index";
 import Graph from "@/components/Graph";
-import Mine from "@/components/Mine";
 import WebIndex from "@/components/WebIndex";
 import Analyze from "@/components/Analyze";
 
@@ -55,11 +54,6 @@ const router = new Router({
       path: "/register",
       name: "register",
       component: Register,
-    },
-    {
-      path: "/mine",
-      name: "mine",
-      component: Mine,
     },
   ],
 });

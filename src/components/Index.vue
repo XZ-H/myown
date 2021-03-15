@@ -321,7 +321,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res);
           let rowThree = res.data;
           //给表格赋值,传递数据
           _this.Imp_table = rowThree;

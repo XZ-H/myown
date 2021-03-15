@@ -16,6 +16,17 @@ export const store = new Vuex.Store({
     navData: ["信息汇总", "微博分析", "微信分析"],
     //存储emotion conditions--Analyze组件
     emotions: ["全部", "正面", "中性", "负面"],
+    //存储media conditions--Analyze组件
+    medias: [
+      "全部",
+      "微信",
+      "微博",
+      "网页",
+      "报刊",
+      "客户端",
+      "论坛",
+      "今日头条",
+    ],
   },
   getters: {
     getUname: (state) => {
